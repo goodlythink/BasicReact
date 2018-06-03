@@ -1,33 +1,30 @@
 import React from 'react'
 import { connect } from 'react-redux'
 import UserList from '../component/UserList'
-
+import { loadUsers } from '../actions'
 
 class User extends React.Component {
-    state = { data: null, err: null }
 
     componentDidMount() {
-        /*
-        fetch('http://jsonplaceholder.typicode.com/users')
-            .then(result => result.json())
-            .then(resultData => this.setState({ data: resultData }))
-            */
-        this.props.loadUsers()
+        this.props.dispatch(loadUsers())
     }
 
     render() {
-        // const { data, err } = this.state
         const { users } = this.props
-        console.log(users)
+
         let list = <div>Loading...</div>
 
-        // if (data) {
-        //     if (data.length > 0) {
-        //         list = <UserList data={data} />
-        //     } else {
-        //         list = <div>No Data</div>
-        //     }
-        // }
+        if (!users.isFailed && users.data) {
+            if (users.data.length > 0) {
+                list = <UserList data={users.data} />
+            } else {
+                list = <div>No Data</div>
+            }
+        }
+
+        if (users.isFailed) {
+            list = <h4>Error: {users.data}</h4>
+        }
 
         return (
             <div>
@@ -49,15 +46,4 @@ function mapStateToProps(state) {
     }
 }
 
-function mapDispatchToProps(dispatch) {
-    return {
-        loadUsers: () => {
-            dispatch({
-                type: 'LOAD_USERS',
-                payload: fetch('http://jsonplaceholder.typicode.com/users')
-                .then(result => result.json())
-            })
-        }
-    }
-}
-export default connect(mapStateToProps, mapDispatchToProps)(User)
+export default connect(mapStateToProps)(User)

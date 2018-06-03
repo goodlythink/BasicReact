@@ -1,7 +1,6 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
 
-class UserList extends React.Component {
+class AlbumList extends React.Component {
     render() {
         const { data } = this.props
         return (
@@ -10,8 +9,7 @@ class UserList extends React.Component {
                     data.map(d => {
                         return (
                             <div key={d.id}>
-                                {/* <h4><Link to={`/album/${d.id}?username${d.name}`}>{d.name} | {d.email}</Link></h4> */}
-                                <h4><Link to={"/album/" + d.id + "?username=" + d.name}>{d.name} | {d.email}</Link></h4>
+                                <h4>{d.title}</h4>
                             </div>
                         )
                     })
@@ -21,4 +19,4 @@ class UserList extends React.Component {
     }
 }
 
-export default UserList
+export default AlbumList
